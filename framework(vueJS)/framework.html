@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <title>vue</title>
+  </head>
+  <body>
+    <div id="todo-list-example">
+      <form v-on:submit.prevent="addNewTodo">
+        <label for="new-todo">Add a todo</label>
+        <input
+          v-model="newTodoText"
+          id="new-todo"
+          placeholder="E.g. tugas daspro"
+        />
+        <button>Add</button>
+      </form>
+      <ul>
+        <li
+          is="todo-item"
+          v-for="(todo, index) in todos"
+          v-bind:key="todo.id"
+          v-bind:title="todo.title"
+          v-on:remove="todos.splice(index, 1)"
+        ></li>
+      </ul>
+    </div>
+    <script>
+      Vue.component("todo-item", {
+        template:
+          "\
+    <li>\
+      {{ title }}\
+      <button v-on:click=\"$emit('remove')\">Remove</button>\
+    </li>\
+  ",
+        props: ["title"],
+      });
+      new Vue({
+        el: "#todo-list-example",
+        data: {
+          newTodoText: "",
+          todos: [
+            {
+              id: 1,
+              title: "cuci pakaian",
+            },
+         ],
+          nextTodoId: 2,
+        },
+        methods: {
+          addNewTodo: function () {
+            this.todos.push({
+              id: this.nextTodoId++,
+              title: this.newTodoText,
+            });
+            this.newTodoText = "";
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
